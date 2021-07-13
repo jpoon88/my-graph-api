@@ -1,0 +1,18 @@
+
+https://graph.microsoft.com/v1.0/users/LeeG@laravelphp.onmicrosoft.com/calendars
+
+AQMkADk2ZGQAMDk0Mi1mY2ZkLTQ3NDktYWMwYy1jMGU0ZTE3MTQ5ZGUARgAAA4HvR-aoS1JNojCZJFBqFMgHAC8C8YpvoQZGhwNe0z4QYUsAAAIBBgAAAC8C8YpvoQZGhwNe0z4QYUsAAAI6jwAAAA==
+
+
+GET https://graph.microsoft.com/v1.0/groups/02bd9fd6-8f93-4758-87c3-1fb73740a315/calendarView?startDateTime=2021-07-01T19:00:00-08:00&endDateTime=2021-07-31T19:00:00.00-08:00
+Prefer: outlook.body-content-type="text"
+
+$filter=start ge 2021-07-01T19:00:00 and start lt 2021-07-31T19:00:00
+
+https://graph.microsoft.com/v1.0/users/LeeG@laravelphp.onmicrosoft.com/events?$select=subject,body,bodyPreview,organizer,attendees,start,end,location
+
+
+https://graph.microsoft.com/v1.0/users/LeeG@laravelphp.onmicrosoft.com/events?$filter=start/dateTime ge '2021-07-01T08:00'$select=subject,body,bodyPreview,organizer,attendees,start,end,location
+
+
+https://graph.microsoft.com/v1.0/users/LeeG@laravelphp.onmicrosoft.com/events?$filter=start/dateTime ge '2021-07-01T08:00'&$select=subject,body,bodyPreview,organizer,attendees,start,end,location&$orderby=start 
