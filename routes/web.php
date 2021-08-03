@@ -24,17 +24,23 @@ Route::get('/', function() {
 
 Route::get('/dashboard',[DashboardController::class, 'index'])->name('dashboard');
 
-Route::get('/login', [AuthController::class, 'signin'])->name('login');
-Route::get('/callback', [AuthController::class, 'callback']);
-Route::post('/logout', [AuthController::class, 'signout'])->name('logout');
+Route::get('/login', [AuthController::class, 'signin'])->name('login')
+  ->middleware('guest');;
 
-Route::get('/calendar', [CalendarController::class,'calendar'])->name('calendar');
+Route::get('/callback', [AuthController::class, 'callback']);
+Route::post('/logout', [AuthController::class, 'signout'])
+        ->name('logout')
+        ->middleware('auth');
+
+Route::get('/calendar', [CalendarController::class,'index'])->name('calendar');
 Route::post('/calendars', [CalendarController::class,'calendars'])->name('calendars');
+
 
 Route::post('/events', [EventController::class,'list'])->name('events');
 Route::post('/calendar/events', [EventController::class,'calendar_events'])->name('calendar_events');
 
 Route::get('/people', [PeopleController::class, 'index'])->name('people');
+        
 
 Route::post('/test', [CalendarController::class,'test'])->name('test');
 

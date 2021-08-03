@@ -11,6 +11,13 @@ use App\TokenStore\TokenCache;
 class PeopleController extends Controller
 {
     //
+      //
+      public function __construct()
+      {
+          $this->middleware(['auth']);
+      }  
+
+
      //
      public function index()
      {
@@ -18,11 +25,9 @@ class PeopleController extends Controller
    
        // Get the access token from the cache
        $tokenCache = new TokenCache();
-       //$accessToken = $tokenCache->getAccessToken();
-       $accessToken = $tokenCache->getAccessTokenForApplication();
+       $accessToken = $tokenCache->getAccessToken();
+       //$accessToken = $tokenCache->getAccessTokenForApplication();
 
-
-   
        // Create a Graph client
        $graph = new Graph();
        $graph->setAccessToken($accessToken);

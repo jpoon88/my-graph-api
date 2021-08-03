@@ -13,23 +13,23 @@
         <li>
             <a href="/" class="p-3">Home</a>
         </li>
-        <li>
-            <a href="{{ route('dashboard') }}" class="p-3">Dashboard</a>
-        </li>
-        @if( session()->get('userName') or env('OAUTH_APP_PERMISSION') )
+        @auth
+            <li>
+                <a href="{{ route('dashboard') }}" class="p-3">Dashboard</a>
+            </li>
             <li>
                 <a href="{{ route('people') }}" class="p-3">People</a>
             </li>
             <li>
-                <a href="{{ route('calendars') }}" class="p-3">Calendar</a>
+                <a href="{{ route('calendar') }}" class="p-3">Calendar</a>
             </li>
-        @endif
+        @endauth
     </ul>
 
     <ul class="flex item-center">
-        @if( session()->get('userName')  )
+        @auth
             <li>
-                <a href="" class="p-3">{{ session()->get('userName') }}</a>
+                <a href="" class="p-3">{{ Auth()->user()->name }}</a>
             </li>
             <li>
                 <form action="{{ route('logout') }}" method="post" class="p-3 inline">
@@ -37,13 +37,15 @@
                     <button type="submit">Logout</button>
                 </form>
             </li>
-        @else 
-           @if (!env('OAUTH_APP_PERMISSION'))
+        @endauth
+        @guest
+            
+        
             <li>
                 <a href="{{ route('login') }}" class="p-3">Login</a>
             </li>
-            @endif
-        @endif
+    
+        @endguest
 
     </ul>
   </nav>

@@ -12,18 +12,26 @@ use App\TokenStore\TokenCache;
 class CalendarController extends Controller
 {
     //
-    public function calendar(Request $request)
+    public function __contruct()
+    {
+        $this->middleware(['auth']);
+    }
+
+    public function index(Request $request)
     {
     $viewData = $this->loadViewData();
 
     // Get the access token from the cache
     $tokenCache = new TokenCache();
-    //$accessToken = $tokenCache->getAccessToken();
-    $accessToken = $tokenCache->getAccessTokenForApplication();
+    $accessToken = $tokenCache->getAccessToken();
+    //$accessToken = $tokenCache->getAccessTokenForApplication();
 
     // Create a Graph client
     $graph = new Graph();
     $graph->setAccessToken($accessToken);
+
+    // Get user's timezone
+    //$timezone = TimeZones::getTzFormatWindows($viewData['userTimeZone']);
 
     $queryParams = array(
       '$select' => 'subject,organizer,start,end,recurrence',
@@ -36,14 +44,13 @@ class CalendarController extends Controller
     //   ->execute();
 
     // Append query parameters to the '/me/events' url
-    //$getEventsUrl = '/me/events?'.http_build_query($queryParams);
+    $getEventsUrl = '/me/events?'.http_build_query($queryParams);
 
     // jpoon test scenario
     // 2.  other person
-    $getEventsUrl = '/users/'.$request->uid .'/events?'.http_build_query($queryParams);
-    //$getEventsUrl = '/me/calendars/'.$request->cid.'/events?'.http_build_query($queryParams);
-    //  getEvenetUrl --> "/me/events?%24select=subject%2Corganizer%2Cstart%2Cend&%24orderby=createdDateTime+DESC"
-
+    //$getEventsUrl = '/users/'.$request->uid .'/events?'.http_build_query($queryParams);
+    //$getEventsUrl = '/me/calendars/events?'.http_build_query($queryParams);
+    // $getEvenetUrl =  "/me/events?%24select=subject%2Corganizer%2Cstart%2Cend&%24orderby=createdDateTime+DESC"
 
 
     $events = $graph->createRequest('GET', $getEventsUrl)
@@ -51,8 +58,7 @@ class CalendarController extends Controller
       ->execute();
 
     // 
-  
-    dd($events);
+    //dd($events);
 
     $viewData['events'] = $events;
     return view('event', $viewData);
@@ -68,8 +74,8 @@ class CalendarController extends Controller
 
     // Get the access token from the cache
     $tokenCache = new TokenCache();
-    //$accessToken = $tokenCache->getAccessToken();
-    $accessToken = $tokenCache->getAccessTokenForApplication();
+    $accessToken = $tokenCache->getAccessToken();
+    //$accessToken = $tokenCache->getAccessTokenForApplication();
 
     // Create a Graph client
     $graph = new Graph();

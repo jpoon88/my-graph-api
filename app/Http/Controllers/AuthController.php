@@ -8,6 +8,7 @@ use Microsoft\Graph\Graph;
 use Microsoft\Graph\Model;
 use Illuminate\Http\Request;
 use App\TokenStore\TokenCache;
+use Illuminate\Support\Facades\Auth;
 
 class AuthController extends Controller
 {
@@ -87,6 +88,17 @@ class AuthController extends Controller
           $tokenCache = new TokenCache();
           $tokenCache->storeTokens($accessToken, $user);
 
+
+
+          // JP -- Local Data 
+          $auth_user = User::updateOrCreate(
+            ['email' => $user->getMail() ],  // check the nmail 
+            ['name' => $user->getDisplayName(),   'password' => '' ]
+          ); 
+          Auth::login($auth_user);         
+          $request->session()->regenerate();
+
+
         // James added started
         // User::create([
         //     'name' => $userrequest->name,
@@ -114,10 +126,16 @@ class AuthController extends Controller
     }
   
     // <SignOutSnippet>
-    public function signout()
+    public function signout(Request $request)
     {
       $tokenCache = new TokenCache();
       $tokenCache->clearTokens();
+
+      // JP added
+      Auth::logout();
+      $request->session()->invalidate();
+      $request->session()->regenerateToken(); 
+
 
       return redirect("https://login.microsoftonline.com/common/oauth2/v2.0/logout?post_logout_redirect_uri=http%3A%2F%2Flocalhost%3A8080%2F");
 
