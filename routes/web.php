@@ -46,3 +46,6 @@ Route::post('/test', [CalendarController::class,'test'])->name('test');
 
 // Route::get('/test', [CalendarController::class,'test']);
 
+Route::get('/terms', function() {
+  return view('terms');
+})->name('terms');
