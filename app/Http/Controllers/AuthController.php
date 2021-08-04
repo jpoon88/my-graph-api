@@ -91,13 +91,14 @@ class AuthController extends Controller
 
 
           // JP -- Local Data 
-          $auth_user = User::updateOrCreate(
-            ['email' => $user->getMail() ],  // check the nmail 
-            ['name' => $user->getDisplayName(),   'password' => '' ]
-          ); 
-          Auth::login($auth_user);         
-          $request->session()->regenerate();
-
+          /*
+          // $auth_user = User::updateOrCreate(
+          //   ['email' => $user->getMail() ],  // check the nmail 
+          //   ['name' => $user->getDisplayName(),   'password' => '' ]
+          // ); 
+          // Auth::login($auth_user);         
+          // $request->session()->regenerate();
+          */  
 
         // James added started
         // User::create([
@@ -132,10 +133,9 @@ class AuthController extends Controller
       $tokenCache->clearTokens();
 
       // JP added
-      Auth::logout();
-      $request->session()->invalidate();
-      $request->session()->regenerateToken(); 
-
+      // Auth::logout();
+      // $request->session()->invalidate();
+      // $request->session()->regenerateToken(); 
 
       return redirect("https://login.microsoftonline.com/common/oauth2/v2.0/logout?post_logout_redirect_uri=http%3A%2F%2Flocalhost%3A8080%2F");
 

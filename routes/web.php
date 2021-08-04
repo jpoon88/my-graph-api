@@ -24,13 +24,13 @@ Route::get('/', function() {
 
 Route::get('/dashboard',[DashboardController::class, 'index'])->name('dashboard');
 
-Route::get('/login', [AuthController::class, 'signin'])->name('login')
-  ->middleware('guest');;
+Route::get('/login', [AuthController::class, 'signin'])->name('login');
+  
 
 Route::get('/callback', [AuthController::class, 'callback']);
 Route::post('/logout', [AuthController::class, 'signout'])
-        ->name('logout')
-        ->middleware('auth');
+        ->name('logout');
+        
 
 Route::get('/calendar', [CalendarController::class,'index'])->name('calendar');
 Route::post('/calendars', [CalendarController::class,'calendars'])->name('calendars');

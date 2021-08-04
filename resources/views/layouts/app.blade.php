@@ -13,7 +13,7 @@
         <li>
             <a href="/" class="p-3">Home</a>
         </li>
-        @auth
+        @if (session('userName'))
             <li>
                 <a href="{{ route('dashboard') }}" class="p-3">Dashboard</a>
             </li>
@@ -23,13 +23,13 @@
             <li>
                 <a href="{{ route('calendar') }}" class="p-3">Calendar</a>
             </li>
-        @endauth
+        @endif
     </ul>
 
     <ul class="flex item-center">
-        @auth
+        @if (session('userName'))
             <li>
-                <a href="" class="p-3">{{ Auth()->user()->name }}</a>
+                <a href="" class="p-3">{{ session('userName') }}</a>
             </li>
             <li>
                 <form action="{{ route('logout') }}" method="post" class="p-3 inline">
@@ -37,15 +37,15 @@
                     <button type="submit">Logout</button>
                 </form>
             </li>
-        @endauth
-        @guest
+        @endif
+        @if (empty(session('userName')) )
             
         
             <li>
                 <a href="{{ route('login') }}" class="p-3">Login</a>
             </li>
     
-        @endguest
+        @endif
 
     </ul>
   </nav>
