@@ -38,8 +38,6 @@ class AuthController extends Controller
     public function callback(Request $request)
     {
 
-      dd($request);
-
       // Validate state
       $expectedState = session('oauthState');
       $request->session()->forget('oauthState');
