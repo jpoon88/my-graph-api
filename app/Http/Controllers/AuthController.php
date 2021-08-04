@@ -38,6 +38,8 @@ class AuthController extends Controller
     public function callback(Request $request)
     {
 
+      dd($request);
+
       // Validate state
       $expectedState = session('oauthState');
       $request->session()->forget('oauthState');
@@ -87,8 +89,6 @@ class AuthController extends Controller
   
           $tokenCache = new TokenCache();
           $tokenCache->storeTokens($accessToken, $user);
-
-
 
           // JP -- Local Data 
           /*
