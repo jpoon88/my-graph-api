@@ -25,6 +25,8 @@ class AppServiceProvider extends ServiceProvider
     public function boot(UrlGenerator $url)
     {
         // force Laravel to use https in URL and assets
-        $url->forceScheme('https');
+        if (env('APP_ENV') != 'local') {
+            $url->forceScheme('https');
+        }
     }
 }

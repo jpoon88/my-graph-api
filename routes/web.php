@@ -6,6 +6,7 @@ use App\Http\Controllers\EventController;
 use App\Http\Controllers\PeopleController;
 use App\Http\Controllers\CalendarController;
 use App\Http\Controllers\DashboardController;
+use App\Http\Controllers\ConversationController;
 /*
 |--------------------------------------------------------------------------
 | Web Routes
@@ -45,6 +46,14 @@ Route::get('/people', [PeopleController::class, 'index'])->name('people');
 Route::post('/test', [CalendarController::class,'test'])->name('test');
 
 // Route::get('/test', [CalendarController::class,'test']);
+
+// Route::get('/test', [CalendarController::class,'test']);
+Route::get('/conversation', [ConversationController::class, 'index'])->name('conversation');
+Route::post('conversation', [ConversationController::class, 'store'])->name('conversation.store');
+Route::get('/ajax-autocomplete-people', [PeopleController::class, 'selectSearch']);
+
+
+
 
 Route::get('/terms', function() {
   return view('terms');

@@ -1,30 +1,32 @@
 @extends('layouts.app')
 
 @section('content')
+    <div class="container">
 
-@auth
-<h2>Is sign in </h2>
-@endauth
-@guest
-<h2>Is a gues (not signin) </h2>    
-@endguest
+        <div class="row justify-content-center">
 
+            <div class="col-md-8">
+                <div class="card">
+                    <div class="card-header">{{ __('Home') }}</div>
+    
+                    <div class="card-body">
+                        @if (session('status'))
+                            <div class="alert alert-success" role="alert">
+                                {{ session('status') }}
+                            </div>
+                        @endif
+    
+                            <div>
+                                Home
+                            </div>
 
+            
 
-    <div class="flex justify-center">
-        <div class="w-8/12 bg-white p-6 rounded-lg">
-            Home
+                    
+                    </div>
+                </div>
+            </div>
         </div>
-
-
     </div>
-
-    <div class="flex justify-center">
-        <div class="w-8/12 bg-white p-6 rounded-lg">
-            <h1>{{  session()->get('userEmail') }}</h1>        
-        @if( session('userName') )
-            <h4>Welcome {{ session('userName') }}!</h4>
-        @endif
-    </div> 
-
+    
 @endsection

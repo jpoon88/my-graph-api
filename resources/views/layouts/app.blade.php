@@ -1,54 +1,105 @@
-<!DOCTYPE html>
-<html lang="en">
+<!doctype html>
+<html lang="{{ str_replace('_', '-', app()->getLocale()) }}">
 <head>
-    <meta charset="UTF-8">
-    <meta http-equiv="X-UA-Compatible" content="IE=edge">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>MS Graph API</title>
-    <link rel='stylesheet' href="{{ asset('css/app.css') }}">
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+
+    <!-- CSRF Token -->
+    <meta name="csrf-token" content="{{ csrf_token() }}">
+
+    <title>{{ config('app.name', 'Laravel') }}</title>
+
+    <!-- Scripts -->
+    <script src="{{ asset('js/app.js') }}" defer></script>
+
+    <!-- Fonts -->
+    <link rel="dns-prefetch" href="//fonts.gstatic.com">
+    <link href="https://fonts.googleapis.com/css?family=Nunito" rel="stylesheet">
+
+    <!-- Styles -->
+    <link href="{{ asset('css/app.css') }}" rel="stylesheet">
+
+    <!-- Styles -->
+    @yield('javascript')
+    @yield('stylesheet')
 </head>
-<body class="bg-gray-200">
-  <nav class="p-6 bg-white flex justify-between mb-6">
-    <ul class="flex item-center">
-        <li>
-            <a href="/" class="p-3">Home</a>
-        </li>
-        @if (session('userName'))
-            <li>
-                <a href="{{ route('dashboard') }}" class="p-3">Dashboard</a>
-            </li>
-            <li>
-                <a href="{{ route('people') }}" class="p-3">People</a>
-            </li>
-            <li>
-                <a href="{{ route('calendar') }}" class="p-3">Calendar</a>
-            </li>
-        @endif
-    </ul>
+<body>
+    <div id="app">
+        <nav class="navbar navbar-expand-md navbar-light bg-white shadow-sm">
+            <div class="container">
+                <a class="navbar-brand" href="{{ url('/') }}">
+                    {{ config('app.name', 'Laravel') }}
+                </a>
+                <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="{{ __('Toggle navigation') }}">
+                    <span class="navbar-toggler-icon"></span>
+                </button>
 
-    <ul class="flex item-center">
-        @if (session('userName'))
-            <li>
-                <a href="" class="p-3">{{ session('userName') }}</a>
-            </li>
-            <li>
-                <form action="{{ route('logout') }}" method="post" class="p-3 inline">
-                    @csrf
-                    <button type="submit">Logout</button>
-                </form>
-            </li>
-        @endif
-        @if (empty(session('userName')) )
-            
-        
-            <li>
-                <a href="{{ route('login') }}" class="p-3">Login</a>
-            </li>
-    
-        @endif
+                <div class="collapse navbar-collapse" id="navbarSupportedContent">
+                    <!-- Left Side Of Navbar -->
+                    <ul class="navbar-nav mr-auto">
+                        <li>
+                            <a href="/" class="p-3">Home</a>
+                        </li>
+                        @if( session()->get('userName')  )                        
+                            <li>
+                                <a href="{{ route('dashboard') }}" class="p-3">Dashboard</a>
+                            </li>
+                            @if( session()->get('userName')  )
+                                <li>
+                                    <a href="{{ route('people') }}" class="p-3">People</a>
+                                </li>
+                                <li>
+                                    <a href="{{ route('calendar') }}" class="p-3">Calendar</a>
+                                </li>
+                                <li>
+                                    <a href="{{ route('conversation') }}" class="p-3">Conversation</a>
+                                </li>
+                            @endif
+                        @endif
+                    </ul>
 
-    </ul>
-  </nav>
-    @yield('content')
-</body> 
+                    <!-- Right Side Of Navbar -->
+                    <ul class="navbar-nav ml-auto">
+                        <!-- Authentication Links -->
+                        @if( session()->get('userName')  )
+                            <li class="nav-item dropdown">
+                                <a id="navbarDropdown" class="nav-link dropdown-toggle" href="#" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false" v-pre>
+                                    {{  session()->get('userName')  }}
+                                </a>
+
+                                <div class="dropdown-menu dropdown-menu-right" aria-labelledby="navbarDropdown">
+                                    <a class="dropdown-item" href="{{ route('logout') }}"
+                                       onclick="event.preventDefault();
+                                                     document.getElementById('logout-form').submit();">
+                                        {{ __('Logout') }}
+                                    </a>
+
+                                    <form id="logout-form" action="{{ route('logout') }}" method="POST" class="d-none">
+                                        @csrf
+                                    </form>
+                                </div>
+                            </li>
+                        @else
+                            @if (Route::has('login'))
+                            <li class="nav-item">
+                                <a class="nav-link" href="{{ route('login') }}">{{ __('Login') }}</a>
+                            </li>
+                            @endif
+
+                            @if (Route::has('register'))
+                                <li class="nav-item">
+                                    <a class="nav-link" href="{{ route('register') }}">{{ __('Register') }}</a>
+                                </li>
+                            @endif
+                        @endif
+                    </ul>
+                </div>
+            </div>
+        </nav>
+
+        <main class="py-4">
+            @yield('content')
+        </main>
+    </div>
+</body>
 </html>
