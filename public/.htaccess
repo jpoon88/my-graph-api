@@ -5,10 +5,10 @@
 
     RewriteEngine On
 
-    # Forcing HTTPS with an .htaccess file on Heroku
-    RewriteCond %{HTTPS} !=on
-    RewriteCond %{HTTP:X-Forwarded-Proto} !https
-    RewriteRule ^ https://%{HTTP_HOST}%{REQUEST_URI} [L,R=301]
+    # Forcing HTTPS with an .htaccess file on Heroku (jpoon)
+    ###RewriteCond %{HTTPS} !=on
+    ###RewriteCond %{HTTP:X-Forwarded-Proto} !https
+    ###RewriteRule ^ https://%{HTTP_HOST}%{REQUEST_URI} [L,R=301]
 
     # Handle Authorization Header
     RewriteCond %{HTTP:Authorization} .
