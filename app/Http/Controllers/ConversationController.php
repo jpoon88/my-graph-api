@@ -2,12 +2,12 @@
 
 namespace App\Http\Controllers;
 
-use App\TimeZones\TimeZones;
-use App\TokenStore\TokenCache;
 use Carbon\Carbon;
-use Illuminate\Http\Request;
 use Microsoft\Graph\Graph;
 use Microsoft\Graph\Model;
+use App\TimeZones\TimeZones;
+use Illuminate\Http\Request;
+use App\TokenStore\TokenCache;
 
 class ConversationController extends Controller
 {
@@ -19,9 +19,9 @@ class ConversationController extends Controller
 
         // Get user's timezone
         $timezone = TimeZones::getTzFromWindows($viewData['userTimeZone']);
-        $now = Carbon::now();
-        $now->day = $now->day + 1;
-        $now->hour = $now->hour + 1;
+        $now = Carbon::now($timezone);
+        $now->day = $now->day;
+        $now->hour = $now->hour;
 
         $array = [
             'eventDate' => $now->format('Y-m-d'),
@@ -34,12 +34,14 @@ class ConversationController extends Controller
     public function store(Request $request)
     {
 
+  
         // Validate required fields
         $request->validate([
             //'eventSubject' => 'required|string',
-            //'eventAttendees' => 'nullable',
+            'eventAttendees' => 'required', // 'nullable',
             'eventDate' => 'required',
             'eventTime' => 'required',
+            'eventDuration' => 'required',
             //'eventBody' => 'nullable|string'
         ]);
 
@@ -139,15 +141,16 @@ class ConversationController extends Controller
                         "timeZone" => "Pacific Standard Time",
                     ],
                     "end" => [
-                        "dateTime" => $today->addDay(2)->format('Y-m-d\TH:i:s'), //"2021-07-18T17:00:00",
+                        "dateTime" => $today->addDay(7)->format('Y-m-d\TH:i:s'), //"2021-07-18T17:00:00",
                         "timeZone" => "Pacific Standard Time",
                     ],
                 ]),
             ],
             "isOrganizerOptional" => false,
-            "meetingDuration" => "PT1H",
+            "meetingDuration" => $request->eventDuration,  // "PT1H",
             "returnSuggestionReasons" => "true",
             "minimumAttendeePercentage" => "100",
+            "maxCandidates" => 20,
         ];
 
         //$json = json_encode($newEvent);
@@ -182,8 +185,44 @@ class ConversationController extends Controller
         //$viewData['eventAttendees'] = [ {'id' => 123, 'name' => 'test' } ];
         //dd ( $attendees  );
 
+        if($request->ajax()) {
+
+            $suggestionsByDate = [];
+            foreach( $viewData['suggestions'] as $suggestion) {
+
+                $start = \Carbon\Carbon::parse($suggestion->getMeetingTimeSlot()->getStart()->getDateTime());
+                $suggestionsByDate[$start->format('Y-m-d')][] = $suggestion;
+            }
+
+            $viewData['suggestionsByDate'] = $suggestionsByDate;
+
+            return view('conversation-partial', $viewData);
+        }
         return view('conversation', $viewData);
 
+    }
+
+
+    public function findmeetingtime(Request $request) 
+    {
+
+        if($request->ajax()){
+            return "AJAX";
+        }
+        return "HTTP";
+
+        // Validate required fields
+        $request->validate([
+            //'eventSubject' => 'required|string',
+            'eventAttendees' => 'required', // 'nullable',
+            'eventDate' => 'required',
+            'eventTime' => 'required',
+            'eventDuration' => 'required',
+            //'eventBody' => 'nullable|string'
+        ]);
+
+        $viewData = $this->loadViewData();
+        return view('conversation-partial', $viewData);
     }
 
     // common function
