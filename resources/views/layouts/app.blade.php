@@ -63,8 +63,17 @@
                         <!-- Authentication Links -->
                         @if( session()->get('userName')  )
                             <li class="nav-item dropdown">
-                                <a id="navbarDropdown" class="nav-link dropdown-toggle" href="#" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false" v-pre>
-                                    {{  session()->get('userName')  }}
+                                <a id="navbarDropdown" class="nav-link dropdown-toggle" href="#" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false" v-pre>                                   
+                                    @if( session('profilePhoto') )
+                                    <span>
+                                        <img style="width: 38px; height: 38px; border-radius:50%;" src="data:image/jpeg;base64,{{ session('profilePhoto') }}" alt="">
+                                    </span>
+                                @else
+                                    <span style="">
+                                        <img style="width: 38px; height: 38px; border-radius:50%;" src="{{ asset('img/avatarsmall.png') }}" alt="avatar">
+                                    </span>
+                                @endif
+                                <span class="pl-2">{{  session()->get('userName')  }}</span>
                                 </a>
 
                                 <div class="dropdown-menu dropdown-menu-right" aria-labelledby="navbarDropdown">

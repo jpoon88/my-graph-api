@@ -13,7 +13,7 @@
         "laravel/tinker": "^2.5",
         "laravel/ui": "^3.3",
         "league/oauth2-client": "^2.6",
-        "microsoft/microsoft-graph": "^1.34"
+        "microsoft/microsoft-graph": "^1.37"
     },
     "require-dev": {
         "facade/ignition": "^2.5",

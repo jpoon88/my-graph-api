@@ -5,7 +5,7 @@
 namespace App\TokenStore;
 
 class TokenCache {
-  public function storeTokens($accessToken, $user) {
+  public function storeTokens($accessToken, $user, $profilePhoto) {
     session([
       'accessToken' => $accessToken->getToken(),
       'refreshToken' => $accessToken->getRefreshToken(),
@@ -14,8 +14,12 @@ class TokenCache {
       'userEmail' => null !== $user->getMail() ? $user->getMail() : $user->getUserPrincipalName(),
       //'userTimeZone' => $user->getMailboxSettings()->getTimeZone(),
       'userTimeZone' => "Pacific Standard Time",
-
     ]);
+    if ($profilePhoto) {
+      session()->put('profilePhoto', base64_encode($profilePhoto) );
+    }
+
+    
   }
 
   public function clearTokens() {
@@ -25,6 +29,7 @@ class TokenCache {
     session()->forget('userName');
     session()->forget('userEmail');
     session()->forget('userTimeZone');
+    session()->forget('profilePhoto');
   }
 
   // <GetAccessTokenSnippet>

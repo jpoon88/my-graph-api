@@ -9,6 +9,7 @@ use Microsoft\Graph\Model;
 use Illuminate\Http\Request;
 use App\TokenStore\TokenCache;
 use Illuminate\Support\Facades\Auth;
+use GuzzleHttp\Exception\ClientException;
 
 class AuthController extends Controller
 {
@@ -84,9 +85,34 @@ class AuthController extends Controller
           $user = $graph->createRequest('GET', '/me')
             ->setReturnType(Model\User::class)
             ->execute();
+
+          //dd( $user );
+
+          // get me/photo/$value
+
+          try {
+            $stream = $graph->createRequest('GET', '/me/photos/48x48/$value')
+            ->setReturnType(\Psr\Http\Message\StreamInterface::class)
+            ->execute();
+          // } catch(ClientException $e) {
+          //   if $e->getResponse()->getStatusCode() == '404'
+          // }
+           } catch(ClientException $e) {
+              if ($e->getResponse()->getStatusCode() == '404') {
+                // No action 
+              } else {
+                  dd('throw error if not 404');
+              // throw ExceptionWrapper::wrapGuzzleBadResponseException($e);
+              }
+           }
+          
+          $profilePhoto = "";
+          if (isset($stream)) {
+            $profilePhoto = $stream->getContents();
+          }
   
           $tokenCache = new TokenCache();
-          $tokenCache->storeTokens($accessToken, $user);
+          $tokenCache->storeTokens($accessToken, $user, $profilePhoto);
 
           // JP -- Local Data 
           /*
